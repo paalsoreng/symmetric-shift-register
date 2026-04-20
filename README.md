@@ -1,6 +1,6 @@
-# sym-shift-register
+# symmetric-shift-register
 
-**sym-shift-register** is a Kotlin implementation of algorithms for computing periods of symmetric shift registers, based on the mathematical work of Jan Søreng.
+**symmetric-shift-register** is a Kotlin implementation of algorithms for computing periods of symmetric shift registers, based on the mathematical work of Jan Søreng.
 
 A symmetric shift register is a binary feedback shift register with a special symmetry property. Determining the period of such a register – that is, how many steps it takes before the state repeats – is a non-trivial mathematical problem. This project provides efficient algorithms that solve this problem analytically, without having to simulate the register step by step.
 

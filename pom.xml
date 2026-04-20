@@ -99,7 +99,7 @@
     </dependencies>
 
     <description>Algorithms and tools for symmetric shift registers, based on the work of Jan Søreng. Includes period calculation, simulation, and conversion utilities. See README.md and the user guide for details.</description>
-    <url>https://github.com/your-org/sym-shift-register</url>
+
     <licenses>
         <license>
             <name>MIT License</name>
