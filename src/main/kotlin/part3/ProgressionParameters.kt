@@ -10,7 +10,7 @@ object ProgressionParameters {
 
         for (i in 1..j) {
             val B = α / f[i - 1]
-            val r = AuxiliaryFunction.calculate(D, B)
+            val r = y / f[i - 1]
             val set1 = E.subList(fromIndex = r , toIndex = r + y)
             val set2 = dPlus(D, B)
 
