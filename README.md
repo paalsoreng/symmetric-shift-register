@@ -52,7 +52,7 @@ The **period** of the register is the number of steps before the register return
 
 ### Relationship between k, p and V
 
-The parameters `k` and `p` are not independent of each other or of V. Given a vector V, let `w(A)` denote the number of `1`-bits in the binary representation of V. Then `k` and `p` must satisfy:
+The parameters `k` and `p` are not independent of each other or of V. Given a vector V, let `w(A)` denote the number of `1`-bits in the binary representation A of V. Then `k` and `p` must satisfy:
 
 ```
 w(A) = k + p + 1
@@ -116,7 +116,7 @@ findMinimalPeriod(V, p)
                   └── General case:
                            ├── DistanceVector  (CIndexes, Tau, IndexFunction)
                            ├── ParameterAlpha  (Tau)
-                           ├── ProgressionParameters (GreatestCommonDivisor, AuxiliaryFunction)
+                           ├── ProgressionParameters (GreatestCommonDivisor)
                            └── LeastSolution   (GreatestCommonDivisor)
                                     → new (j, B)
 
@@ -134,7 +134,6 @@ Before anything else, the algorithm checks that the parameter `p` is valid for t
 ```
 h[0] = 0
 h[i] = h[i-1] + V[i-1] * (-1)^(i-1)
-     = h[i-1] + V[i-1],  - V[i-1],  + V[i-1], ...
 ```
 
 `MaximalityProperty` then scans `h` to find `hMax` – the highest value reached before `h` first drops to zero or below.
@@ -158,8 +157,6 @@ tau[0] = 0
 tau[i] = tau[i-1] + V[i-1] - 1
 ```
 
-This maps positions in V into an index space used by later steps.
-
 #### 2b – Find Decomposition Parameters (r)
 
 `DecompositionParameters.calculate(V)` finds a list of "anchor indices" `r = [r0, r1, r2, ...]` that mark the boundaries of the symmetric structure in V.
@@ -170,10 +167,10 @@ It works by repeatedly calling `InternalIndexFunction`:
 r[0] = 0
 r[j+1] = r[j] + 2 * tMax + 1
 
-where tMax = number of consecutive 1s in V starting just after r[j]
+where tMax = InternalIndexFunction(r[j])
 ```
 
-`InternalIndexFunction` counts how many `1`s appear in V at positions `r+1, r+3, r+5, ...` before hitting a non-1.
+Suppose V=[v_0, ..., v{s-1}] and 0 <= r < s-1. Then `InternalIndexFunction(r)` = t where t >= 0 is maximal such that r+2t < s-1 and v_{r+2i} = 1 for 1 <= i <= t.
 
 #### 2c – Build the contracted vector π
 
@@ -204,7 +201,7 @@ This extended vector is used as input to the cyclic parameter calculation.
 
 **Code:** `CyclicParameters.calculate(Vp_ext)`
 
-This finds the smallest cyclic shift `j` such that shifting `Vp_ext` left by `j` positions gives back the same vector, and computes `B` as the sum of the first `j` elements.
+This finds the smallest even cyclic shift `j` such that shifting `Vp_ext` left by `j` positions gives back the same vector, and computes `B` as the sum of the first `j` elements.
 
 ```
 for each even divisor e of len(Vp_ext):
@@ -229,7 +226,7 @@ At each level, there are two cases:
 
 #### Simple case – no interior 1s
 
-If V has no `1`s in positions `1 .. s-2` (i.e., only the first and/or last elements can be 1), the update is trivial:
+Suppose V = [v_0, ..., v_{s-1}]. If V has no 1s in positions 0 ... s-2, the update is trivial:
 
 ```
 new_B = B + j
@@ -249,7 +246,7 @@ First, `CIndexes.calculate(V)` finds a chain of indices `c = [c0, c1, ..., cγ]`
 ```
 c[0] = 0
 c[i+1] = smallest index > c[i] + 1 where V[index - 1] == 1
-          (or stop if no such index exists)
+          (or stop if no such index exists preceding the last index of V)
 ```
 
 Then `D[i] = tau[c[i+1]]` for `i = 1 .. γ`, using the `tau` sequence from step 2a.
@@ -267,7 +264,7 @@ This is the total "span" of the vector in tau-space plus one.
 ```
 for each factor f of gcd(|D|, α), in descending order:
     B_candidate = α / f
-    r = count of elements in D that are ≤ B_candidate
+    r = y / f
     if D[r .. r+|D|-1] (in the extended D ++ D+α) == D.map { it + B_candidate }:
         return (alphaStar = B_candidate, gammaStar = r)
 ```
@@ -335,7 +332,7 @@ The algorithms are verified at three levels: step-by-step inspection of a single
 
 - **Main results** – the computed minimal period
 - **Contraction of Q** – how the vector is contracted level by level
-- **Periodic parameters** – the cyclic parameters (ζ and j) at each level
+- **Periodic parameters** – the parameters (ζ and j) at each level
 - **Intermediate calculations** – every sub-step in detail
 
 This makes it easy to follow the mathematics by hand and confirm that each step produces the expected output. It is particularly useful for understanding and validating a new or edge-case vector.
