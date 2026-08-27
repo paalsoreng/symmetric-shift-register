@@ -5,6 +5,7 @@ import part6.GeneralCase
 import part6.VectorRepresentation
 import part7.AdjustmentOfParameters
 import part7.MaximalityProperty
+import relativeweight.RelativeWeight
 import report.ShiftAndFlipReportGenerator
 import simulation.Simulation
 import startvector.AllCases
@@ -211,6 +212,24 @@ class SymmetricShiftRegisterApi {
         }
         val binary = BinaryRepresentation.calculate(V)
         return ShiftAndFlipReportGenerator(binary, k, p).simulateWithExplanation()
+    }
+
+    /**
+     * Computes the relative weight sequence W for a given vector V and parameters p, k.
+     *
+     * Starting from w0 = w(A) - k (where w(A) is the number of one-bits in the binary
+     * representation of V), the sequence is iterated [length] steps using the shift-register
+     * state transition rule.
+     *
+     * @param V The vector
+     * @param p The parameter p
+     * @param k The parameter k
+     * @param length The number of steps to iterate
+     * @return The relative weight sequence W as a list of [length] + 1 integers
+     * @throws IllegalArgumentException if k or the number of one-bits violates the required assumptions
+     */
+    fun calculateRelativeWeight(V: List<Int>, p: Int, k: Int, length: Int): List<Int> {
+        return RelativeWeight.calculate(V, p, k, length)
     }
 
     /**
