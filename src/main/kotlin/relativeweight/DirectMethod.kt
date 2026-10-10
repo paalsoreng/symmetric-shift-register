@@ -38,8 +38,8 @@ object DirectMethod {
                 break
             }
             if (a == aOriginal) {
-                println("Minimal period: $counter");
-                break;
+                println("Minimal period: $counter")
+                break
             }
         }
         return counter
