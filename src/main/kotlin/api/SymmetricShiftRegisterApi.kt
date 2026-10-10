@@ -5,7 +5,6 @@ import part6.GeneralCase
 import part6.VectorRepresentation
 import part7.AdjustmentOfParameters
 import part7.MaximalityProperty
-import relativeweight.RelativeWeight
 import report.ShiftAndFlipReportGenerator
 import simulation.Simulation
 import startvector.AllCases
@@ -117,7 +116,7 @@ class SymmetricShiftRegisterApi {
         if (p + 1 > hMax)
             throw IllegalArgumentException(
                 "Invalid parameter: p=$p for V=$V. " +
-                    "p (=$p) must be less than the peak of the alternating sum sequence (= $hMax), so valid values for p are 0 to ${hMax - 1}."
+                        "p (=$p) must be less than the peak of the alternating sum sequence (= $hMax), so valid values for p are 0 to ${hMax - 1}."
             )
     }
 
@@ -137,13 +136,13 @@ class SymmetricShiftRegisterApi {
         if (numberOfOneBits != k + p + 1)
             throw IllegalArgumentException(
                 "Invalid parameters: p=$p, k=$k for V=$V. " +
-                    "Requirement 1: the number of one-bits in the binary representation ($numberOfOneBits) must equal k + p + 1 (= ${k + p + 1}). " +
-                    "Requirement 2: p (=$p) must be less than the peak of the alternating sum sequence (= $hMax), so valid values for p are 0 to ${hMax - 1}."
+                        "Requirement 1: the number of one-bits in the binary representation ($numberOfOneBits) must equal k + p + 1 (= ${k + p + 1}). " +
+                        "Requirement 2: p (=$p) must be less than the peak of the alternating sum sequence (= $hMax), so valid values for p are 0 to ${hMax - 1}."
             )
         if (p + 1 > hMax)
             throw IllegalArgumentException(
                 "Invalid parameters: p=$p, k=$k for V=$V. " +
-                    "p (=$p) must be less than the peak of the alternating sum sequence (= $hMax), so valid values for p are 0 to ${hMax - 1}."
+                        "p (=$p) must be less than the peak of the alternating sum sequence (= $hMax), so valid values for p are 0 to ${hMax - 1}."
             )
     }
 
@@ -212,24 +211,6 @@ class SymmetricShiftRegisterApi {
         }
         val binary = BinaryRepresentation.calculate(V)
         return ShiftAndFlipReportGenerator(binary, k, p).simulateWithExplanation()
-    }
-
-    /**
-     * Computes the relative weight sequence W for a given vector V and parameters p, k.
-     *
-     * Starting from w0 = w(A) - k (where w(A) is the number of one-bits in the binary
-     * representation of V), the sequence is iterated [length] steps using the shift-register
-     * state transition rule.
-     *
-     * @param V The vector
-     * @param p The parameter p
-     * @param k The parameter k
-     * @param length The number of steps to iterate
-     * @return The relative weight sequence W as a list of [length] + 1 integers
-     * @throws IllegalArgumentException if k or the number of one-bits violates the required assumptions
-     */
-    fun calculateRelativeWeight(V: List<Int>, p: Int, k: Int, length: Int): List<Int> {
-        return RelativeWeight.calculate(V, p, k, length)
     }
 
     /**
